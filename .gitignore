@@ -1,0 +1,20 @@
+# Entorno virtual
+venv/
+env/
+ENV/
+
+# Variables de entorno (Contiene claves secretas)
+.env
+
+# Caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Otros archivos de sistema
+.DS_Store
+Thumbs.db
+
+# carpeta de uploads
+uploads/*
+!.gitkeep
