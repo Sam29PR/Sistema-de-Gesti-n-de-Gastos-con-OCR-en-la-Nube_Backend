@@ -21,14 +21,34 @@ def normalize_invoice(fields: dict):
                 "description": description,
                 "valor": amount
             })
-
+        
         return items
 
+    def get_fecha(field):
+        try:
+            return field["value"] 
+        except:
+            return None
+
+    def get_text(field):
+        try:
+            return field["value"]
+        except:       
+            return None
+
+
+
+
+
+
     normalized = {
+        "tienda": get_text(fields.get("StoreName", {})),
+        "fecha": get_fecha(fields.get("InvoiceDate", {})),
         "total": get_amount(fields.get("InvoiceTotal", {})),
         "subtotal": get_amount(fields.get("SubTotal", {})),
         "iva": get_amount(fields.get("TotalTax", {})),
-        "items": get_items(fields.get("Items", {})),
+        "metodo de pago": None,
+        "items": get_items(fields.get("Items", {}))
     }
 
     return normalized
