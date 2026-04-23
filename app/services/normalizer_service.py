@@ -1,4 +1,5 @@
 def normalize_invoice(fields: dict):
+
     def get_amount(field):
         try:
             return field["value"]["amount"]
@@ -31,23 +32,24 @@ def normalize_invoice(fields: dict):
             return None
 
     def get_text(field):
-        try:
-            return field["value"]
-        except:       
+        if not field:
             return None
-
-
-
-
+        
+        return (
+            field.get("value")
+            or field.get("valueString")
+            or field.get("valueNumber")
+            or field.get("valueDate")
+        )
 
 
     normalized = {
-        "tienda": get_text(fields.get("StoreName", {})),
+        "tienda": get_text(fields.get("VendorName", {})),
         "fecha": get_fecha(fields.get("InvoiceDate", {})),
         "total": get_amount(fields.get("InvoiceTotal", {})),
         "subtotal": get_amount(fields.get("SubTotal", {})),
         "iva": get_amount(fields.get("TotalTax", {})),
-        "metodo de pago": None,
+        "metodo de pago": get_text(fields.get("PaymentTerm", {})),
         "items": get_items(fields.get("Items", {}))
     }
 
