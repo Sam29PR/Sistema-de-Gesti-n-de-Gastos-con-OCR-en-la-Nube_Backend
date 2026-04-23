@@ -1,8 +1,11 @@
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File , Depends
 import shutil
 import os
 from app.services.azure_service import analyze_invoice
 from app.services.normalizer_service import normalize_invoice
+from app.services.db_service import save_invoice
+from app.db.database import get_session
+from sqlmodel import Session
 
 router = APIRouter()
 
@@ -11,7 +14,10 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
 @router.post("/upload")
-async def upload_invoice(file: UploadFile = File(...)):
+async def upload_invoice(
+    file: UploadFile = File(...),
+    session: Session = Depends(get_session)
+):
     file_path = f"{UPLOAD_DIR}/{file.filename}"
 
     with open(file_path, "wb") as buffer:
@@ -20,9 +26,19 @@ async def upload_invoice(file: UploadFile = File(...)):
     result = analyze_invoice(file_path)
     normalized = normalize_invoice(result)
 
+    #  guardar en la base de datos
+    save_invoice(session, normalized)
+
     return {
         "message": "Procesado con Azure",
         "raw": result,
         "data": normalized
 
     }
+
+@router.get("/")
+def get_facturas():
+    return [
+        {"id": 1, "cliente": "Juan", "total": 100},
+        {"id": 2, "cliente": "María", "total": 200}
+    ]
