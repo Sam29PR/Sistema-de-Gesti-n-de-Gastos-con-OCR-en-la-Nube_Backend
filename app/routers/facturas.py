@@ -6,6 +6,9 @@ from app.services.normalizer_service import normalize_invoice
 from app.services.db_service import save_invoice
 from app.db.database import get_session
 from sqlmodel import Session
+from app.models.invoice import Invoice, Item
+from sqlmodel import select
+
 
 router = APIRouter()
 
@@ -37,8 +40,7 @@ async def upload_invoice(
     }
 
 @router.get("/")
-def get_facturas():
-    return [
-        {"id": 1, "cliente": "Juan", "total": 100},
-        {"id": 2, "cliente": "María", "total": 200}
-    ]
+def get_facturas(session: Session = Depends(get_session)):
+    facturas = session.exec(select(Invoice)).all()
+    return facturas
+    
