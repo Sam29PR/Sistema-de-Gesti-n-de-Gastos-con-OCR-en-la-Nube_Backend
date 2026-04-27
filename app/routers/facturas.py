@@ -8,6 +8,9 @@ from app.db.database import get_session
 from sqlmodel import Session
 from app.models.invoice import Invoice, Item
 from sqlmodel import select
+from app.schemas.factura_schema import FacturaPublic, ItemRead
+from sqlalchemy.orm import selectinload
+
 
 
 router = APIRouter()
@@ -39,8 +42,13 @@ async def upload_invoice(
 
     }
 
-@router.get("/")
+@router.get("/", response_model=list[FacturaPublic])
 def get_facturas(session: Session = Depends(get_session)):
-    facturas = session.exec(select(Invoice)).all()
-    return facturas
     
+    statement = select(Invoice).options(
+        selectinload(Invoice.items)
+        
+    )
+
+    facturas = session.exec(statement).all()
+    return facturas
