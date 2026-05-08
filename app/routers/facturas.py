@@ -46,9 +46,8 @@ async def upload_invoice(
 def get_facturas(session: Session = Depends(get_session)):
     
     statement = select(Invoice).options(
-        selectinload(Invoice.items)
-        
-    )
+        selectinload(Invoice.items)   
+    ).order_by(Invoice.id.desc()) 
 
     facturas = session.exec(statement).all()
     return facturas

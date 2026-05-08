@@ -19,4 +19,7 @@ class Invoice(SQLModel, table=True):
     iva: Optional[float]
     metodo_pago: Optional[str]
 
+    categoria: Optional[str] = None
+
     items: List[Item] = Relationship(back_populates="invoice")
+

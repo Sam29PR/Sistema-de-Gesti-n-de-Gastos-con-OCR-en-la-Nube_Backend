@@ -1,8 +1,11 @@
 from sqlmodel import Session
 from app.models.invoice import Invoice, Item
+from app.services.category_service import detect_category
 
 
 def save_invoice(session: Session, data: dict):
+
+    categoria = detect_category(data["tienda"])
     invoice = Invoice(
         tienda=data.get("tienda"),
         fecha=data.get("fecha"),
@@ -10,6 +13,7 @@ def save_invoice(session: Session, data: dict):
         subtotal=data.get("subtotal"),
         iva=data.get("iva"),
         metodo_pago=data.get("metodo de pago"),
+        categoria = categoria
     )
 
     session.add(invoice)

@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel, create_engine, Session
 
-DATABASE_URL = "mysql+pymysql://root:Programer2026@localhost:3306/gastos_db"
+DATABASE_URL = "mysql+pymysql://root:Programer2026@localhost:3306/gastos_v2"
 
 engine = create_engine(DATABASE_URL, echo=True)
 

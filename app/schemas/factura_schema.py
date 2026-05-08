@@ -16,5 +16,6 @@ class FacturaPublic(SQLModel):
     subtotal: Optional[float]
     iva: Optional[float]
     metodo_pago: Optional[str]
+    categoria: Optional[str] = None
 
     items: List[ItemRead] = []
