@@ -11,15 +11,26 @@ class Item(SQLModel, table=True):
     invoice: Optional["Invoice"] = Relationship(back_populates="items")
 
 class Invoice(SQLModel, table=True):
+
     id: Optional[int] = Field(default=None, primary_key=True)
+
     tienda: Optional[str]
+
     fecha: Optional[str]
+
     total: Optional[float]
+
     subtotal: Optional[float]
+
     iva: Optional[float]
+
     metodo_pago: Optional[str]
 
     categoria: Optional[str] = None
+
+    nombre_archivo: Optional[str] = None
+
+    estado: Optional[str] = None
 
     items: List[Item] = Relationship(back_populates="invoice")
 

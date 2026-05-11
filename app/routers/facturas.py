@@ -31,6 +31,7 @@ async def upload_invoice(
 
     result = analyze_invoice(file_path)
     normalized = normalize_invoice(result)
+    normalized["nombre_archivo"] = file.filename
 
     #  guardar en la base de datos
     save_invoice(session, normalized)
