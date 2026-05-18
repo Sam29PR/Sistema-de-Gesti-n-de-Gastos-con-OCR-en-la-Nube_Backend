@@ -1,27 +1,26 @@
 from sqlmodel import Session , select
 from app.models.invoice import Invoice, Item
 from app.services.category_service import detect_category
-from app.services.invoice_validator_service import validate_invoice
+from app.services.invoice_validator_service import get_invoice_state
+
 
 
 def save_invoice(session: Session, data: dict):
 
     categoria = detect_category(data["tienda"])
 
+    total =float(data.get("total") or 0)
+
     existing_invoice = session.exec(
         select(Invoice).where(
             Invoice.tienda == data.get("tienda"),
-            Invoice.total == data.get("total"),
+            Invoice.total == total,
             Invoice.fecha == data.get("fecha")
         )
     ).first()
 
-    if existing_invoice:
-
-        estado = "Duplicado"
-    
-    else:
-        estado = validate_invoice(data)
+    #estado centralizado 
+    estado = get_invoice_state(data, is_duplicate=bool(existing_invoice))
 
     invoice = Invoice(
         tienda=data.get("tienda"),

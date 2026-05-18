@@ -5,3 +5,6 @@ opencv-python
 pyzbar
 azure-ai-formrecognizer
 dotenv
+sqlmodel
+pydantic
+openai

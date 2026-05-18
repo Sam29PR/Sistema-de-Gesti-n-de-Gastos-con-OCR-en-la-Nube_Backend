@@ -18,5 +18,6 @@ class FacturaPublic(SQLModel):
     metodo_pago: Optional[str]
     categoria: Optional[str] = None
     nombre_archivo: Optional[str] = None
+    estado: str | None = None   
 
     items: List[ItemRead] = []

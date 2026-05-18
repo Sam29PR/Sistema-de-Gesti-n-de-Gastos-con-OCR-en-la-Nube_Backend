@@ -1,31 +1,26 @@
-def validate_invoice(data):
+def get_invoice_state(data, is_duplicate=False):
 
-    # =========================
-    # ERROR
-    # =========================
+    # 🔴 1. DUPLICADO (PRIORIDAD MÁXIMA)
+    if is_duplicate:
+        return "Duplicado"
 
+    # 🔴 2. ERROR
     if not data:
         return "Error"
 
-    # =========================
-    # RECHAZADO
-    # =========================
+    # 🔴 3. VALIDACIÓN TOTAL
+    try:
+        total = float(data.get("total") or 0)
+    except:
+        return "Error"
 
-    if data.get("total", 0) <= 0:
+    # 🔴 4. RECHAZADO
+    if total <= 0:
         return "Rechazado"
 
-    # =========================
-    # REVISIÓN
-    # =========================
-
-    if not data.get("fecha"):
+    # 🔴 5. REVISIÓN
+    if not data.get("tienda") or not data.get("fecha"):
         return "Revisión"
 
-    if not data.get("tienda"):
-        return "Revisión"
-
-    # =========================
-    # PROCESADO
-    # =========================
-
+    # 🟢 6. PROCESADO
     return "Procesado"
